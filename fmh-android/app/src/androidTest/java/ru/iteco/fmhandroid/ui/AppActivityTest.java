@@ -14,8 +14,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
+
+
+import static ru.iteco.fmhandroid.ui.waitID.waitId;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +37,10 @@ import org.junit.runner.RunWith;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import ru.iteco.fmhandroid.R;
+import ru.iteco.fmhandroid.ui.waitID;
 
 @LargeTest
-@RunWith(AllureAndroidJUnit4.class)
+@RunWith(AndroidJUnit4.class)
 public class AppActivityTest {
 
     @Rule
@@ -47,12 +49,12 @@ public class AppActivityTest {
     @Test
 //    public void appActivityTest(){
 //
-//    }
+//    }}
     public void appActivityTest() {
-//        onView(isRoot()).perform(waitFor(5000));
-        ViewInteraction textInputEditText = onView(
-                withId(R.id.login_text_input_layout));
+        ViewInteraction textInputEditText = onView(isRoot()).
+                perform(waitId(R.id.login_text_input_layout, 5000));
         textInputEditText.perform(replaceText("login2"), closeSoftKeyboard());
+    };
     }
 
 //        ViewInteraction textInputEditText2 = onView(
@@ -110,4 +112,4 @@ public class AppActivityTest {
 //            }
 //        };
 //    }
-}
+

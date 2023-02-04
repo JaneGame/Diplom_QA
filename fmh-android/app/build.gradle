@@ -23,15 +23,16 @@ android {
         versionCode 14
         versionName "1.0.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner "io.qameta.allure.android.runners.AllureAndroidJUnitRunner"
     }
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        targetCompatibility= '15'
     }
 
     buildFeatures {
@@ -50,7 +51,9 @@ android {
     }
 }
 
-
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -115,4 +118,8 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
         exclude module: "protobuf-lite"
     }
+    implementation 'io.qameta.allure:allure-kotlin-model:2.4.0'
+    implementation 'io.qameta.allure:allure-kotlin-commons:2.4.0'
+    implementation 'io.qameta.allure:allure-kotlin-junit4:2.4.0'
+
 }

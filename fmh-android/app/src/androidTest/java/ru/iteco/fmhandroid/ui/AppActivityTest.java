@@ -4,6 +4,7 @@ package ru.iteco.fmhandroid.ui;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.doubleClick;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -50,12 +52,12 @@ public class AppActivityTest {
 //    public void appActivityTest(){
 //
 //    }}
-    public void appActivityTest() {
-        ViewInteraction textInputEditText = onView(isRoot()).
-                perform(waitId(R.id.login_text_input_layout, 5000));
-        textInputEditText.perform(replaceText("login2"), closeSoftKeyboard());
+    public void appActivityTest() throws InterruptedException {
+        onView(isRoot()).perform(waitId(R.id.login_text_input_layout, 10000));
+        onView(childAtPosition(childAtPosition(withId(R.id.login_text_input_layout),0),0))
+                .perform(replaceText("login2"));
     };
-    }
+
 
 //        ViewInteraction textInputEditText2 = onView(
 //                allOf(childAtPosition(
@@ -94,22 +96,22 @@ public class AppActivityTest {
 //        imageButton.check(matches(isDisplayed()));
 //    }
 //
-//    private static Matcher<View> childAtPosition(
-//            final Matcher<View> parentMatcher, final int position) {
-//
-//        return new TypeSafeMatcher<View>() {
-//            @Override
-//            public void describeTo(Description description) {
-//                description.appendText("Child at position " + position + " in parent ");
-//                parentMatcher.describeTo(description);
-//            }
-//
-//            @Override
-//            public boolean matchesSafely(View view) {
-//                ViewParent parent = view.getParent();
-//                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-//                        && view.equals(((ViewGroup) parent).getChildAt(position));
-//            }
-//        };
-//    }
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+   }}
 

@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
@@ -66,7 +67,7 @@ public class AppActivityTest {
     @Rule
     public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
 
-    @Before
+ //   @Before
 //    static void startActivity() {
 //        onView(isRoot()).perform(waitId(R.id.login_text_input_layout, 10000));
 //        //новый степ который вводит текст login2 в EditText формы логина:
@@ -84,7 +85,6 @@ public class AppActivityTest {
 
     public void appActivityTest() {
         onView(isRoot()).perform(waitId(R.id.login_text_input_layout, 10000));
-        //новый степ который вводит текст login2 в EditText формы логина:
         onView(allOf(
                 withClassName(containsString(TextInputEditText.class.getSimpleName())),
                 isDescendantOfA(withId(R.id.login_text_input_layout))
@@ -94,7 +94,13 @@ public class AppActivityTest {
                 isDescendantOfA(withId(R.id.password_text_input_layout))
         )).perform(typeText("password2"), closeSoftKeyboard());
         onView(withText(R.string.sign_in)).perform(click());
-        onView(withId(R.id.authorization_image_button)).check(matches(isDisplayed()));
+        onView(isRoot()).perform(waitId(R.id.main_swipe_refresh, 10000));
+        onView(withId(R.id.authorization_image_button)).check(matches(isDisplayed()))
+                .perform(click());
+        onView(allOf(
+                instanceOf(LinearLayout.class),
+                isDescendantOfA(withId(R.id.content))));
+                //.perform(click());
     }
 
     @Test

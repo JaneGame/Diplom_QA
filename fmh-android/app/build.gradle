@@ -22,8 +22,8 @@ android {
         targetSdkVersion 32
         versionCode 14
         versionName "1.0.0"
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-//        testInstrumentationRunner "io.qameta.allure.android.runners.AllureAndroidJUnitRunner"
+//        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner "io.qameta.allure.android.runners.AllureAndroidJUnitRunner"
     }
 
     compileOptions {
@@ -114,7 +114,8 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.4.1-alpha03'
     implementation "androidx.test.espresso:espresso-idling-resource:3.3.0"
     androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'io.qameta.allure:allure-kotlin-android:2.0.0'
+    androidTestImplementation 'io.qameta.allure:allure-kotlin-android:2.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
 //    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
 //        exclude module: "protobuf-lite"
 //    }

@@ -15,7 +15,7 @@ import org.hamcrest.Matcher;
 
 import java.util.concurrent.TimeoutException;
 
-public class waitID {
+public class WaitId {
     public static ViewAction waitId(final int viewId, final long millis) {
         return new ViewAction() {
             @Override

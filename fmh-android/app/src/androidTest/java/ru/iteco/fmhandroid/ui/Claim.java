@@ -7,15 +7,19 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ru.iteco.fmhandroid.ui.Help.auth;
 import static ru.iteco.fmhandroid.ui.Help.checkIfLogin;
+import static ru.iteco.fmhandroid.ui.Help.createClaimBefore;
 import static ru.iteco.fmhandroid.ui.Help.openClaim;
+import static ru.iteco.fmhandroid.ui.WaitId.waitId;
 
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -23,6 +27,8 @@ import android.widget.TimePicker;
 import androidx.appcompat.widget.MenuPopupWindow;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.RootMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 
@@ -56,35 +62,11 @@ public class Claim {
     @Test
 
     public void executor() throws InterruptedException {
-        onView(withId(R.id.add_new_claim_material_button)).perform(click());
-        LocalDateTime now = LocalDateTime.now();
-        onView(withId(R.id.title_edit_text)).perform(typeText("Test" + now));
-        //onView(withId(R.id.executor_drop_menu_auto_complete_text_view)).perform(click());
-        //onView(withText("Ivanov Ivan Ivanovich")).perform(click());
-        onView(withId(R.id.date_in_plan_text_input_layout)).perform(click());
-        onView(isAssignableFrom(DatePicker.class))
-                .perform(PickerActions.setDate(
-                        now.getYear(),
-                        now.getMonthValue(),
-                        now.getDayOfMonth())
-                );
-
-        onView(withText(android.R.string.ok)).perform(click());
-
-        onView(withId(R.id.time_in_plan_text_input_layout)).perform(click());
-
-        onView(isAssignableFrom(TimePicker.class))
-                .perform(PickerActions.setTime(
-                        now.getHour(),
-                        now.getMinute())
-                );
-        onView(withText(android.R.string.ok)).perform(click());
-
-        onView(withId(R.id.description_edit_text)).perform(typeText("Hi"+now), closeSoftKeyboard());
-
-        onView(withId(R.id.save_button)).perform(click());
-
-        onView(withText("Test" + now)).perform(scrollTo());
+        createClaimBefore();
         Thread.sleep(5000);
+        onView(ViewMatchers.withId(R.id.claim_list_recycler_view))
+                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(text))))
+                .perform(click());
+        onView(withText(R.string.in_progress)).check(matches(isDisplayed()));
     }
 }

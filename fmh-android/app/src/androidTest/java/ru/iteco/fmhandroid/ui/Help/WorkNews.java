@@ -25,10 +25,12 @@ import androidx.test.espresso.matcher.ViewMatchers;
 
 import java.time.LocalDateTime;
 
+import io.qameta.allure.kotlin.Step;
 import ru.iteco.fmhandroid.R;
 
 public class WorkNews {
 
+    @Step("Создание новости")
     public static void createNews(String text, LocalDateTime now, String popup){
         onView(withId(R.id.edit_news_material_button)).perform(click());
         onView(withId(R.id.add_news_image_view)).perform(click());
@@ -56,6 +58,7 @@ public class WorkNews {
         onView(withText(R.string.save)).perform(click());
     }
 
+    @Step("Фильтрация новости по категории")
     public static void filterNewsByCategory(String found, String text){
         onView(withId(R.id.filter_news_material_button)).perform(click());
         onView(withId(R.id.news_item_category_text_auto_complete_text_view)).perform(click());

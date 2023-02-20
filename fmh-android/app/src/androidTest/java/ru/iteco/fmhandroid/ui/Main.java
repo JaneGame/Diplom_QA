@@ -30,6 +30,8 @@ import org.junit.runner.RunWith;
 import java.time.LocalDateTime;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+import io.qameta.allure.kotlin.Step;
+import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
 @LargeTest
@@ -40,6 +42,7 @@ public class Main {
     public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
 
     @Before
+    @Step("Авторизация при её отсутствии")
     public void loginIfrequired() {
         if (!checkIfLogin()) {
             auth("login2", "password2");
@@ -48,18 +51,21 @@ public class Main {
     }
 
     @Test
+    @DisplayName("Просмотр всех новостей")
     public void allNews(){
         onView(withText(R.string.all_news)).perform(click());
         onView(withId(R.id.all_news_cards_block_constraint_layout)).check(matches(isDisplayed()));
     }
 
     @Test
+    @DisplayName("Просмотр заявки")
     public void claimView(){
         onView(withIndex(withId(R.id.claim_list_card), 0)).perform(click());
         onView(isRoot()).perform(waitId(R.id.container_custom_app_bar_include_on_fragment_open_claim, 5000)).check(matches(isDisplayed()));
     }
 
     @Test
+    @DisplayName("Просмотр всех заявок")
     public void allClaim(){
         onView(withText(R.string.all_claims)).perform(click());
         onView(isRoot()).perform(waitId(R.id.container_custom_app_bar_include_on_fragment_list_claim, 10000)).check(matches(isDisplayed()));
@@ -67,6 +73,7 @@ public class Main {
 
 
     @Test
+    @DisplayName("Создание заявки с главной страницы")
     public void createClaimMain(){
         onView(isRoot()).perform(waitId(R.id.add_new_claim_material_button, 15000)).perform(click());
         LocalDateTime now = LocalDateTime.now();
@@ -78,18 +85,21 @@ public class Main {
     }
 
     @Test
+    @DisplayName("Просмотр новости с главной страницы")
     public void newView(){
         onView(withIndex(withId(R.id.news_item_material_card_view), 0)).perform(click());
         onView(isRoot()).perform(waitId(R.id.news_item_description_text_view, 5000)).check(matches(isDisplayed()));
     }
 
     @Test
+    @DisplayName("Просмотр цитат")
     public void quote(){
         onView(withId(R.id.our_mission_image_button)).perform(click());
         onView(isRoot()).perform(waitId(R.id.our_mission_title_text_view, 5000)).check(matches(isDisplayed()));
     }
 
     @Test
+    @DisplayName("Выход из аккаунта")
     public void exit(){
         onView(withId(R.id.authorization_image_button)).perform(click());
         workPopup("Log out");

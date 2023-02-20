@@ -26,22 +26,33 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 
+import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 
+import io.qameta.allure.kotlin.Description;
+import io.qameta.allure.kotlin.Epic;
+import io.qameta.allure.kotlin.Step;
+import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
+@Epic("Страница с заявками")
+@DisplayName("Страница с заявками")
 public class Claim {
 
     @Rule
-    public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
+//    public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
+    public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
+           .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
+    @Step("Авторизация при её отсутствии")
     public void loginIfrequired() {
         if (!checkIfLogin()) {
             auth("login2", "password2");
@@ -50,7 +61,8 @@ public class Claim {
     }
 
     @Test
-
+    @DisplayName("Создание заявки с исполнителем")
+    @Description("Создание заявки без указания исполнителя приводит к созданию заявки в в статусе 'В работе'")
     public void executor() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -65,7 +77,8 @@ public class Claim {
     }
 
     @Test
-
+    @DisplayName("Создание заявки без исполнителя")
+    @Description("Создание заявки без указания исполнителя приводит к созданию заявки в открытом статусе")
     public void noExecutor() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -77,7 +90,8 @@ public class Claim {
         onView(withText(R.string.open)).check(matches(isDisplayed()));
     }
     @Test
-
+    @DisplayName("Фильтр заявок")
+    @Description("Фильтрация заявок по одному из признаков")
     public void filterClaim(){
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -90,6 +104,8 @@ public class Claim {
     }
 
     @Test
+    @DisplayName("Перевод заявки в статус закрытой")
+    @Description("Закрытие заявки")
     public void openToClose() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -104,6 +120,8 @@ public class Claim {
     }
 
     @Test
+    @DisplayName("Взятие заявки в работу")
+    @Description("Перевод заявки из статуса 'Открыто' в статус 'В работе'")
     public void openToWork() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -118,6 +136,8 @@ public class Claim {
     }
 
     @Test
+    @DisplayName("Изменение заявки")
+    @Description("Изменение данных в заявке")
     public void editClaim() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;

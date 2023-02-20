@@ -48,6 +48,8 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+import io.qameta.allure.kotlin.Step;
+import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
 @LargeTest
@@ -58,6 +60,7 @@ public class News {
     public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
 
     @Before
+    @Step("Авторизация при её отсутствиии переход к новостям")
     public void loginIfrequired() {
         if (!checkIfLogin()) {
             auth("login2", "password2");
@@ -66,6 +69,7 @@ public class News {
     }
 
     @Test
+    @DisplayName("Создание новости")
     public void createNewsTest(){
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -79,6 +83,7 @@ public class News {
 
 
     @Test
+    @DisplayName("Фильтр по дате")
     public void filterNewsByDate() {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -116,6 +121,7 @@ public class News {
     }
 
     @Test
+    @DisplayName("Фильтр по категории 'Обявление'")
     public void filterNewsByCategoryAd() {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -123,8 +129,9 @@ public class News {
         createNews(text, now, found);
         filterNewsByCategory(found, text);
     }
-    @Test
 
+    @Test
+    @DisplayName("Фильтр по категории 'День рождения'")
     public void filterNewsByCategoryHappy() {
     LocalDateTime now = LocalDateTime.now();
     String text = "Test" + now;
@@ -134,7 +141,7 @@ public class News {
 }
 
     @Test
-
+    @DisplayName("Фильтр по категории 'Зарплата'")
     public void filterNewsByCategoryMoney() {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -144,7 +151,7 @@ public class News {
     }
 
     @Test
-
+    @DisplayName("Фильтр по категории 'Профсоюз'")
     public void filterNewsByCategoryUnion() {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -155,7 +162,7 @@ public class News {
 
 
     @Test
-
+    @DisplayName("Фильтр по категории 'Праздник'")
     public void filterNewsByCategoryHoliday() {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
@@ -165,6 +172,7 @@ public class News {
     }
 
     @Test
+    @DisplayName("Удаление новости")
     public void deleteNews(){
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;

@@ -23,6 +23,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+import io.qameta.allure.kotlin.Description;
+import io.qameta.allure.kotlin.Step;
+import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
 import static org.hamcrest.core.AllOf.allOf;
@@ -35,6 +38,7 @@ public class AuthorisationTest {
     public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
 
     @Before
+    @Step("Выход при наличии авторизации")
     public void loginIfNoRequired() {
         if (checkIfLogin()) {
             onView(withId(R.id.authorization_image_button)).check(matches(isDisplayed()))
@@ -43,7 +47,8 @@ public class AuthorisationTest {
     }}
 
     @Test
-
+    @DisplayName("Удачная авторизация")
+    @Description("Вход с указанием корректных логина и пароля")
     public void authorisationTrue() {
         auth("login2", "password2");
         authGood();
@@ -51,6 +56,8 @@ public class AuthorisationTest {
 
 
     @Test
+    @DisplayName("Неудачная авторизация")
+    @Description("Вход с ошибочными данными")
     public void authorisationFalse() {
         auth("login2", "Password2");
         onView(withText(R.string.authorization)).check(matches(isDisplayed()));

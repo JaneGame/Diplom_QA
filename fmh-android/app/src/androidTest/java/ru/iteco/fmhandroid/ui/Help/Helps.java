@@ -34,9 +34,12 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.time.LocalDateTime;
 
+import io.qameta.allure.kotlin.Step;
 import ru.iteco.fmhandroid.R;
 
 public class Helps {
+
+    @Step("Авторизация")
     public static void auth(String login, String password){
         onView(isRoot()).perform(waitId(R.id.login_text_input_layout, 10000));
         onView(allOf(
@@ -50,6 +53,7 @@ public class Helps {
         onView(withText(R.string.sign_in)).perform(click());
     }
 
+    @Step("Отсутствие авторизации")
     public static boolean checkIfLogin() {
         boolean isLogin = true;
         try {
@@ -60,6 +64,7 @@ public class Helps {
         return isLogin;
     }
 
+    @Step("Наличие авторизации")
     public static void authGood(){
         onView(isRoot()).perform(waitId(R.id.main_swipe_refresh, 15000)).check(matches(isDisplayed()));
     }

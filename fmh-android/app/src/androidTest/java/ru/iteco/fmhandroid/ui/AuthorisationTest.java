@@ -20,8 +20,10 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
+import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Step;
@@ -35,7 +37,8 @@ import static org.hamcrest.core.AllOf.allOf;
 public class AuthorisationTest {
 
     @Rule
-    public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
+    public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
+            .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
     @Step("Выход при наличии авторизации")

@@ -39,6 +39,7 @@ import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
+import ru.iteco.fmhandroid.ui.AppActivity;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
@@ -47,7 +48,6 @@ import ru.iteco.fmhandroid.R;
 public class Claim {
 
     @Rule
-//    public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
     public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
            .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 

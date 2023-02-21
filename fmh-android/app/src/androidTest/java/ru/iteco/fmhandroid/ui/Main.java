@@ -25,10 +25,12 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
 
+import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
@@ -39,7 +41,8 @@ import ru.iteco.fmhandroid.R;
 public class Main {
 
     @Rule
-    public ActivityTestRule<AppActivity> mActivityTestRule = new ActivityTestRule<>(AppActivity.class);
+    public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
+            .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
     @Step("Авторизация при её отсутствии")

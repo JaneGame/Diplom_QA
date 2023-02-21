@@ -115,12 +115,10 @@ dependencies {
  //   implementation "androidx.test.espresso:espresso-idling-resource:3.3.0"
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'io.qameta.allure:allure-kotlin-android:2.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
-//    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
-//        exclude module: "protobuf-lite"
-//    }
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
     implementation 'io.qameta.allure:allure-kotlin-model:2.4.0'
     implementation 'io.qameta.allure:allure-kotlin-commons:2.4.0'
     implementation 'io.qameta.allure:allure-kotlin-junit4:2.4.0'
+    implementation 'androidx.test:orchestrator:1.4.2'
 
 }

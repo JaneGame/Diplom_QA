@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Step;
@@ -44,8 +45,8 @@ public class AuthorisationTest {
             .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
-    @Step("Выход при наличии авторизации")
     public void loginIfNoRequired() {
+        Allure.step("Отсутствие авторизации и выход из системы при необходимости");
         if (checkIfLogin()) {
             onView(withId(R.id.authorization_image_button)).check(matches(isDisplayed()))
                     .perform(click());
@@ -56,7 +57,9 @@ public class AuthorisationTest {
     @DisplayName("Удачная авторизация")
     @Description("Вход с указанием корректных логина и пароля")
     public void authorisationTrue() {
+        Allure.step("Авторизация с корректными данными");
         auth("login2", "password2");
+        Allure.step("Успешный вход");
         authGood();
     }
 
@@ -65,7 +68,9 @@ public class AuthorisationTest {
     @DisplayName("Неудачная авторизация")
     @Description("Вход с ошибочными данными")
     public void authorisationFalse() {
+        Allure.step("Авторизация с неверными данными");
         auth("login2", "Password2");
+        Allure.step("Авторизация не удалась");
         onView(withText(R.string.authorization)).check(matches(isDisplayed()));
     }
 

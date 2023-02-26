@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 
+import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Step;
@@ -52,8 +53,8 @@ public class Claim {
            .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
-    @Step("Авторизация при её отсутствии")
     public void loginIfrequired() {
+        Allure.step("Наличие авторизации и вход в систему при необходимости");
         if (!checkIfLogin()) {
             auth("login2", "password2");
         }
@@ -73,6 +74,7 @@ public class Claim {
         foundClaim(text);
 //        onView(isRoot()).perform(waitId(R.id.status_icon_image_view, 10000)).check(matches(isDisplayed()));
         Thread.sleep(2000);
+        Allure.step("Заявка создалась в нужном статусе");
         onView(withText(R.string.in_progress)).check(matches(isDisplayed()));
     }
 
@@ -85,8 +87,8 @@ public class Claim {
         createClaimBefore(text);
         createClaimAfter(now);
         foundClaim(text);
- //       onView(isRoot()).perform(waitId(R.id.status_icon_image_view, 10000)).check(matches(isDisplayed()));
         Thread.sleep(2000);
+        Allure.step("Заявка создалась в нужном статусе");
         onView(withText(R.string.open)).check(matches(isDisplayed()));
     }
     @Test
@@ -97,6 +99,7 @@ public class Claim {
         String text = "Test" + now;
         createClaimBefore(text);
         createClaimAfter(now);
+        Allure.step("Фильтрация заявок");
         onView(withId(R.id.filters_material_button)).perform(click());
         onView(withId(R.id.item_filter_in_progress)).perform(click());
         onView(withId(R.id.claim_list_filter_ok_material_button)).perform(click());
@@ -112,10 +115,11 @@ public class Claim {
         createClaimBefore(text);
         createClaimAfter(now);
         foundClaim(text);
+        Allure.step("Отмена заявки");
         onView(withId(R.id.status_processing_image_button)).perform(click());
         workPopup("Cancel");
- //       onView(isRoot()).perform(waitId(R.id.status_icon_image_view, 10000)).check(matches(isDisplayed()));
         Thread.sleep(2000);
+        Allure.step("Заявка отменена");
         onView(withText(R.string.status_claim_canceled)).check(matches(isDisplayed()));
     }
 
@@ -128,10 +132,11 @@ public class Claim {
         createClaimBefore(text);
         createClaimAfter(now);
         foundClaim(text);
+        Allure.step("Перевод заявки в статус 'В работе'");
         onView(withId(R.id.status_processing_image_button)).perform(click());
         workPopup("take to work");
-  //      onView(isRoot()).perform(waitId(R.id.status_icon_image_view, 10000)).check(matches(isDisplayed()));
         Thread.sleep(2000);
+        Allure.step("Заявка переведена в необходимый статус");
         onView(withText(R.string.in_progress)).check(matches(isDisplayed()));
     }
 
@@ -144,14 +149,15 @@ public class Claim {
         createClaimBefore(text);
         createClaimAfter(now);
         foundClaim(text);
+        Allure.step("Внесение изменений в заявку");
         onView(withId(R.id.edit_processing_image_button)).perform(click());
         Thread.sleep(2000);
         onView(withId(R.id.executor_drop_menu_auto_complete_text_view)).perform(click());
         workPopup("Ivanov Ivan Ivanovich");
         onView(withId(R.id.executor_drop_menu_auto_complete_text_view)).perform(closeSoftKeyboard());
         onView(withId(R.id.save_button)).perform(click());
-   //     onView(isRoot()).perform(waitId(R.id.status_icon_image_view, 10000)).check(matches(isDisplayed()));
         Thread.sleep(2000);
+        Allure.step("Заявка переведена в необходимый статус");
         onView(withText(R.string.in_progress)).check(matches(isDisplayed()));
     }
 }

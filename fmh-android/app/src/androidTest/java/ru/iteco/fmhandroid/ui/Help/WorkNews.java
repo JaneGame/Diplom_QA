@@ -25,6 +25,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 
 import java.time.LocalDateTime;
 
+import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Step;
 import ru.iteco.fmhandroid.R;
 
@@ -32,6 +33,7 @@ public class WorkNews {
 
     @Step("Создание новости")
     public static void createNews(String text, LocalDateTime now, String popup){
+        Allure.step("Создание новости");
         onView(withId(R.id.edit_news_material_button)).perform(click());
         onView(withId(R.id.add_news_image_view)).perform(click());
         onView(withId(R.id.news_item_category_text_auto_complete_text_view)).perform(click());
@@ -60,6 +62,7 @@ public class WorkNews {
 
     @Step("Фильтрация новости по категории")
     public static void filterNewsByCategory(String found, String text){
+        Allure.step("Фильтрация новости по категории");
         onView(withId(R.id.filter_news_material_button)).perform(click());
         onView(withId(R.id.news_item_category_text_auto_complete_text_view)).perform(click());
      //   onView(withId(R.id.text_input_end_icon)).perform(click());

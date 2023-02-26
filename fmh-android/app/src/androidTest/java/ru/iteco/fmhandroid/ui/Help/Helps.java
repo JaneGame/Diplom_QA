@@ -34,6 +34,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.time.LocalDateTime;
 
+import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Step;
 import ru.iteco.fmhandroid.R;
 
@@ -72,6 +73,7 @@ public class Helps {
 
 
     public static void workPopup(String name){
+        Allure.step("Выбор "+(name)+"");
         onView(withText(name))
                 .inRoot(RootMatchers.isPlatformPopup())
                 .perform(click());

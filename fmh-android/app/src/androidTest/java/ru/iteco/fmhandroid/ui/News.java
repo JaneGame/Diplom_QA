@@ -50,6 +50,7 @@ import java.util.NoSuchElementException;
 
 import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
@@ -66,8 +67,9 @@ public class News {
             .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
-    @Step("Авторизация при её отсутствиии переход к новостям")
+
     public void loginIfrequired() {
+        Allure.step("Наличие авторизации и вход в систему при необходимости");
         if (!checkIfLogin()) {
             auth("login2", "password2");
         }
@@ -81,6 +83,7 @@ public class News {
         String text = "Test" + now;
         String found = "Объявление";
         createNews(text, now, found);
+        Allure.step("Поиск созданной новости");
         onView(isRoot()).perform(waitId(R.id.news_list_recycler_view, 10000));
         onView(ViewMatchers.withId(R.id.news_list_recycler_view))
                 .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))))
@@ -94,6 +97,7 @@ public class News {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
         createNews(text, now, "Объявление");
+        Allure.step("Фильтрация по дате");
         onView(withId(R.id.filter_news_material_button)).perform(click());
 
         onView(withId(R.id.news_item_publish_date_start_text_input_edit_text)).perform(click());
@@ -119,6 +123,8 @@ public class News {
         onView(withText(android.R.string.ok)).perform(click());
 
         onView(withId(R.id.filter_button)).perform(click());
+
+        Allure.step("Поиск созданной новости");
 
         onView(isRoot()).perform(waitId(R.id.news_list_recycler_view, 10000));
         onView(ViewMatchers.withId(R.id.news_list_recycler_view))
@@ -184,11 +190,14 @@ public class News {
         String text = "Test" + now;
         String found = "Объявление";
         createNews(text, now, found);
+        Allure.step("Поиск новости");
         onView(isRoot()).perform(waitId(R.id.news_list_recycler_view, 10000));
         onView(ViewMatchers.withId(R.id.news_list_recycler_view))
                 .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))));
+        Allure.step("Удаление новости");
         onView(allOf(hasSibling(withText(found+text)), withId(R.id.delete_news_item_image_view))).perform(click());
         onView(withText(R.string.fragment_positive_button)).perform(click());
+        Allure.step("Новость не ищется");
         try{onView(ViewMatchers.withId(R.id.news_list_recycler_view))
                 .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))));
         }catch (PerformException ex){

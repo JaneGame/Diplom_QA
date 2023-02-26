@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Description;
+import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
@@ -34,6 +35,8 @@ import static org.hamcrest.core.AllOf.allOf;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
+@Epic("Авторизация")
+@DisplayName("Авторизация")
 public class AuthorisationTest {
 
     @Rule

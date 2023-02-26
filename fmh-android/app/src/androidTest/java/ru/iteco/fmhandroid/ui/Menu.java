@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
+import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
@@ -32,6 +33,8 @@ import static ru.iteco.fmhandroid.ui.Help.WorkMenu.openNews;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
+@Epic("Меню")
+@DisplayName("Переходы через меню")
 public class Menu {
 
 

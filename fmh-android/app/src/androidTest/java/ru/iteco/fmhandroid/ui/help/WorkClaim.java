@@ -1,4 +1,4 @@
-package ru.iteco.fmhandroid.ui.Help;
+package ru.iteco.fmhandroid.ui.help;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -12,7 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import static ru.iteco.fmhandroid.ui.Help.WaitId.waitId;
+import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
 
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -24,7 +24,6 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import java.time.LocalDateTime;
 
 import io.qameta.allure.kotlin.Allure;
-import io.qameta.allure.kotlin.Step;
 import ru.iteco.fmhandroid.R;
 
 public class WorkClaim {

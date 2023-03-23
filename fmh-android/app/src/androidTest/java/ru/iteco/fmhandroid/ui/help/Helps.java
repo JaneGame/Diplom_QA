@@ -1,4 +1,4 @@
-package ru.iteco.fmhandroid.ui.Help;
+package ru.iteco.fmhandroid.ui.help;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -15,11 +15,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
-import static ru.iteco.fmhandroid.ui.Help.WaitId.waitId;
+import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
+import static ru.iteco.fmhandroid.ui.help.WaitId.waitText;
 
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -80,7 +80,69 @@ public class Helps {
     }
 
 
+    public static void clickString(final int matcher){
+        onView(withText(matcher)).perform(click());
+    }
 
+    public static void clickStringWait(final int matcher){
+        onView(isRoot()).perform(waitText(matcher, 5000)).perform(click());
+    }
+
+    public static void clickAndFoundElement(int matcher){
+        onView(withId(matcher)).check(matches(isDisplayed())).perform(click());
+    }
+
+    public static void foundString(final int matcher){
+        onView(isRoot()).perform(waitText(matcher, 5000)).check(matches(isDisplayed()));
+    }
+
+    public static void foundElement(final int matcher){
+        onView(withId(matcher)).check(matches(isDisplayed()));
+    }
+
+    public static void changeIndex(final int matcher){
+        onView(withIndex(withId(matcher), 0)).perform(click());
+    }
+
+    public static void clickElement(final int matcher){
+        onView(withId(matcher)).perform(click());
+    }
+
+    public static void closeKeyboard(final int matcher){
+        onView(withId(matcher)).perform(closeSoftKeyboard());
+    }
+
+    public static void waitElement(final int matcher){
+        onView(isRoot()).perform(waitId(matcher, 15000)).check(matches(isDisplayed()));
+    }
+
+    public static void waitElementAndClick(final int matcher){
+        onView(isRoot()).perform(waitId(matcher, 15000)).check(matches(isDisplayed())).perform(click());
+    }
+
+    public static void scroll(final int matcher, String found){
+        onView(ViewMatchers.withId(matcher))
+                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found))))
+                .check(matches(isDisplayed()));
+    }
+
+    public static void chooseDate(LocalDateTime now){
+        onView(isAssignableFrom(DatePicker.class))
+                .perform(PickerActions.setDate(
+                        now.getYear(),
+                        now.getMonthValue(),
+                        now.getDayOfMonth() - 1)
+                );
+    }
+
+    public static void chooseDateEnd(LocalDateTime now){
+        onView(isAssignableFrom(DatePicker.class))
+                .perform(PickerActions.setDate(
+                        now.getYear(),
+                        now.getMonthValue(),
+                        now.getDayOfMonth())
+                );
+    }
 
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
@@ -99,5 +161,7 @@ public class Helps {
             }
         };
     }
+
+
 
 }

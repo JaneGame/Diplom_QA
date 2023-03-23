@@ -1,19 +1,20 @@
-package ru.iteco.fmhandroid.ui.Help;
+package ru.iteco.fmhandroid.ui.help;
 
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ru.iteco.fmhandroid.ui.Help.Helps.workPopup;
-import static ru.iteco.fmhandroid.ui.Help.WaitId.waitId;
+import static org.hamcrest.core.AllOf.allOf;
+import static ru.iteco.fmhandroid.ui.help.Helps.workPopup;
+import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
 
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -73,5 +74,13 @@ public class WorkNews {
         onView(ViewMatchers.withId(R.id.news_list_recycler_view))
                 .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))))
                 .check(matches(isDisplayed()));
+    }
+
+    public static void clickOk(){
+        onView(withText(android.R.string.ok)).perform(click());
+    }
+
+    public static void deleteNew(String text){
+        onView(allOf(hasSibling(withText(text)), withId(R.id.delete_news_item_image_view))).perform(click());
     }
 }

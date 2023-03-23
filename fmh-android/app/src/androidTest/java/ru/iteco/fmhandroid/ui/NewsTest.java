@@ -1,43 +1,40 @@
 package ru.iteco.fmhandroid.ui;
 
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.hasSibling;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
-import static ru.iteco.fmhandroid.ui.Help.Helps.auth;
-import static ru.iteco.fmhandroid.ui.Help.Helps.checkIfLogin;
-import static ru.iteco.fmhandroid.ui.Help.Helps.workPopup;
-import static ru.iteco.fmhandroid.ui.Help.WaitId.waitId;
-import static ru.iteco.fmhandroid.ui.Help.WorkMenu.openClaim;
-import static ru.iteco.fmhandroid.ui.Help.WorkMenu.openNews;
-import static ru.iteco.fmhandroid.ui.Help.WorkNews.createNews;
-import static ru.iteco.fmhandroid.ui.Help.WorkNews.filterNewsByCategory;
+import static ru.iteco.fmhandroid.ui.help.Helps.auth;
+import static ru.iteco.fmhandroid.ui.help.Helps.checkIfLogin;
+import static ru.iteco.fmhandroid.ui.help.Helps.chooseDate;
+import static ru.iteco.fmhandroid.ui.help.Helps.chooseDateEnd;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickString;
+import static ru.iteco.fmhandroid.ui.help.Helps.foundElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.scroll;
+import static ru.iteco.fmhandroid.ui.help.Helps.waitElement;
+import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
+import static ru.iteco.fmhandroid.ui.help.WorkMenu.openNews;
+import static ru.iteco.fmhandroid.ui.help.WorkNews.clickOk;
+import static ru.iteco.fmhandroid.ui.help.WorkNews.createNews;
+import static ru.iteco.fmhandroid.ui.help.WorkNews.deleteNew;
+import static ru.iteco.fmhandroid.ui.help.WorkNews.filterNewsByCategory;
 
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import androidx.test.espresso.PerformException;
-import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -46,25 +43,20 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Epic;
-import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
 @LargeTest
-@RunWith(AllureAndroidJUnit4.class)
+//@RunWith(AllureAndroidJUnit4.class)
 @Epic("Новости")
 @DisplayName("Действия с новостями")
-public class News {
+public class NewsTest extends BaseTest {
 
-    @Rule
-    public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
-            .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
 
@@ -84,10 +76,8 @@ public class News {
         String found = "Объявление";
         createNews(text, now, found);
         Allure.step("Поиск созданной новости");
-        onView(isRoot()).perform(waitId(R.id.news_list_recycler_view, 10000));
-        onView(ViewMatchers.withId(R.id.news_list_recycler_view))
-                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))))
-                .check(matches(isDisplayed()));
+        waitElement(R.id.news_list_recycler_view);
+        scroll(R.id.news_list_recycler_view,(found+text));
     }
 
 
@@ -98,38 +88,24 @@ public class News {
         String text = "Test" + now;
         createNews(text, now, "Объявление");
         Allure.step("Фильтрация по дате");
-        onView(withId(R.id.filter_news_material_button)).perform(click());
+        clickElement(R.id.filter_news_material_button);
+        waitElement(R.id.news_item_publish_date_start_text_input_edit_text);
+        clickElement(R.id.news_item_publish_date_start_text_input_edit_text);
 
-        onView(withId(R.id.news_item_publish_date_start_text_input_edit_text)).perform(click());
+        chooseDate(now);
 
-        onView(isAssignableFrom(DatePicker.class))
-                .perform(PickerActions.setDate(
-                        now.getYear(),
-                        now.getMonthValue(),
-                        now.getDayOfMonth() - 1)
-                );
+        clickOk();
+        clickElement(R.id.news_item_publish_date_end_text_input_edit_text);
 
-        onView(withText(android.R.string.ok)).perform(click());
+        chooseDateEnd(now);
 
-        onView(withId(R.id.news_item_publish_date_end_text_input_edit_text)).perform(click());
-
-        onView(isAssignableFrom(DatePicker.class))
-                .perform(PickerActions.setDate(
-                        now.getYear(),
-                        now.getMonthValue(),
-                        now.getDayOfMonth())
-                );
-
-        onView(withText(android.R.string.ok)).perform(click());
-
-        onView(withId(R.id.filter_button)).perform(click());
+        clickOk();
+        clickElement(R.id.filter_button);
 
         Allure.step("Поиск созданной новости");
 
-        onView(isRoot()).perform(waitId(R.id.news_list_recycler_view, 10000));
-        onView(ViewMatchers.withId(R.id.news_list_recycler_view))
-                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText("Объявление"+text))))
-                .check(matches(isDisplayed()));
+        waitElement(R.id.news_list_recycler_view);
+        scroll(R.id.news_list_recycler_view,("Объявление"+text));
     }
 
     @Test
@@ -191,18 +167,15 @@ public class News {
         String found = "Объявление";
         createNews(text, now, found);
         Allure.step("Поиск новости");
-        onView(isRoot()).perform(waitId(R.id.news_list_recycler_view, 10000));
-        onView(ViewMatchers.withId(R.id.news_list_recycler_view))
-                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))));
+        waitElement(R.id.news_list_recycler_view);
+        scroll(R.id.news_list_recycler_view,(found+text));
         Allure.step("Удаление новости");
-        onView(allOf(hasSibling(withText(found+text)), withId(R.id.delete_news_item_image_view))).perform(click());
-        onView(withText(R.string.fragment_positive_button)).perform(click());
+        deleteNew((found+text));
+        clickString(R.string.fragment_positive_button);
         Allure.step("Новость не ищется");
-        try{onView(ViewMatchers.withId(R.id.news_list_recycler_view))
-                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(found+text))));
+        try{scroll(R.id.news_list_recycler_view,(found+text));
         }catch (PerformException ex){
-            onView(withId((R.id.news_list_recycler_view)));
+            foundElement(R.id.news_list_recycler_view);
         };
-
     }
 }

@@ -21,33 +21,32 @@ import io.qameta.allure.android.rules.ScreenshotRule;
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Epic;
-import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
-import static ru.iteco.fmhandroid.ui.Help.Helps.auth;
-import static ru.iteco.fmhandroid.ui.Help.Helps.authGood;
-import static ru.iteco.fmhandroid.ui.Help.Helps.checkIfLogin;
-import static ru.iteco.fmhandroid.ui.Help.WorkMenu.openClaim;
-import static ru.iteco.fmhandroid.ui.Help.WorkMenu.openNews;
+import static ru.iteco.fmhandroid.ui.help.Helps.auth;
+import static ru.iteco.fmhandroid.ui.help.Helps.authGood;
+import static ru.iteco.fmhandroid.ui.help.Helps.checkIfLogin;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickString;
+import static ru.iteco.fmhandroid.ui.help.Helps.foundElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.waitElement;
+import static ru.iteco.fmhandroid.ui.help.WorkMenu.openClaim;
+import static ru.iteco.fmhandroid.ui.help.WorkMenu.openNews;
 
 
 @LargeTest
-@RunWith(AllureAndroidJUnit4.class)
+//@RunWith(AllureAndroidJUnit4.class)
 @Epic("Меню")
 @DisplayName("Переходы через меню")
-public class Menu {
-
-
-        @Rule
-        public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
-                .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
+public class MenuTest extends BaseTest {
 
         @Before
         public void loginIfrequired() {
             Allure.step("Наличие авторизации и вход в систему при необходимости");
             if (!checkIfLogin()) {
                 auth("login2", "password2");
+
         }}
 
 
@@ -57,7 +56,7 @@ public class Menu {
             public void menuClaims(){
             openClaim();
             Allure.step("Заявки отображаются");
-            onView(withId(R.id.claim_list_recycler_view)).check(matches(isDisplayed()));
+            foundElement(R.id.claim_list_recycler_view);
         }
 
         @Test
@@ -65,7 +64,7 @@ public class Menu {
         public void menuNews(){
             openNews();
             Allure.step("Новости отображаются");
-            onView(withId(R.id.all_news_cards_block_constraint_layout)).check(matches(isDisplayed()));
+            foundElement(R.id.all_news_cards_block_constraint_layout);
         }
 
         @Test
@@ -73,10 +72,10 @@ public class Menu {
         public void menuAboutUs(){
             authGood();
             Allure.step("Переход к информации о хосписе");
-            onView(withId(R.id.main_menu_image_button)).perform(click());
-            onView(withText(R.string.about)).perform(click());
+            clickElement(R.id.main_menu_image_button);
+            clickString(R.string.about);
             Allure.step("Информация о хосписе отображается");
-            onView(withId(R.id.container_custom_app_bar_include_on_fragment_about)).check(matches(isDisplayed()));
+            waitElement(R.id.container_custom_app_bar_include_on_fragment_about);
         }
 
         @Test
@@ -84,9 +83,9 @@ public class Menu {
         public void menuMain(){
             menuNews();
             Allure.step("Переход на главную страницу");
-            onView(withId(R.id.main_menu_image_button)).perform(click());
-            onView(withText(R.string.main)).perform(click());
+            clickElement(R.id.main_menu_image_button);
+            clickString(R.string.main);
             Allure.step("Главная страница отображается");
-            onView(withId(R.id.container_custom_app_bar_include_on_fragment_main)).check(matches(isDisplayed()));
+            waitElement(R.id.container_custom_app_bar_include_on_fragment_main);
         }
 }

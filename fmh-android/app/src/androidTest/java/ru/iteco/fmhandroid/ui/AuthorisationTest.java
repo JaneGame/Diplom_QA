@@ -10,9 +10,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import static ru.iteco.fmhandroid.ui.Help.Helps.auth;
-import static ru.iteco.fmhandroid.ui.Help.Helps.authGood;
-import static ru.iteco.fmhandroid.ui.Help.Helps.checkIfLogin;
+import static ru.iteco.fmhandroid.ui.help.Helps.auth;
+import static ru.iteco.fmhandroid.ui.help.Helps.authGood;
+import static ru.iteco.fmhandroid.ui.help.Helps.checkIfLogin;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickAndFoundElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickString;
+import static ru.iteco.fmhandroid.ui.help.Helps.foundString;
 
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -28,30 +31,26 @@ import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Allure;
 import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Epic;
-import io.qameta.allure.kotlin.Step;
 import io.qameta.allure.kotlin.junit4.DisplayName;
 import ru.iteco.fmhandroid.R;
 
 import static org.hamcrest.core.AllOf.allOf;
 
 @LargeTest
-@RunWith(AllureAndroidJUnit4.class)
+//@RunWith(AllureAndroidJUnit4.class)
 @Epic("Авторизация")
 @DisplayName("Авторизация")
-public class AuthorisationTest {
+public class AuthorisationTest extends BaseTest{
 
-    @Rule
-    public RuleChain chain = RuleChain.outerRule(new ActivityTestRule<>(AppActivity.class))
-            .around(new ScreenshotRule(ScreenshotRule.Mode.FAILURE, "ss_end"));
 
     @Before
     public void loginIfNoRequired() {
         Allure.step("Отсутствие авторизации и выход из системы при необходимости");
         if (checkIfLogin()) {
-            onView(withId(R.id.authorization_image_button)).check(matches(isDisplayed()))
-                    .perform(click());
-            onView(withText(R.string.log_out)).perform(click());
-    }}
+
+            clickAndFoundElement(R.id.authorization_image_button);
+            clickString(R.string.log_out);
+        }}
 
     @Test
     @DisplayName("Удачная авторизация")
@@ -71,7 +70,7 @@ public class AuthorisationTest {
         Allure.step("Авторизация с неверными данными");
         auth("login2", "Password2");
         Allure.step("Авторизация не удалась");
-        onView(withText(R.string.authorization)).check(matches(isDisplayed()));
+        foundString(R.string.authorization);
     }
 
     }

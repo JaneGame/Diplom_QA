@@ -16,6 +16,10 @@ import static ru.iteco.fmhandroid.ui.help.Helps.checkIfLogin;
 import static ru.iteco.fmhandroid.ui.help.Helps.clickAndFoundElement;
 import static ru.iteco.fmhandroid.ui.help.Helps.clickString;
 import static ru.iteco.fmhandroid.ui.help.Helps.foundString;
+import static ru.iteco.fmhandroid.ui.help.Steps.authButton;
+import static ru.iteco.fmhandroid.ui.help.Steps.authError;
+import static ru.iteco.fmhandroid.ui.help.Steps.authYes;
+import static ru.iteco.fmhandroid.ui.help.Steps.logOut;
 
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -48,8 +52,8 @@ public class AuthorisationTest extends BaseTest{
         Allure.step("Отсутствие авторизации и выход из системы при необходимости");
         if (checkIfLogin()) {
 
-            clickAndFoundElement(R.id.authorization_image_button);
-            clickString(R.string.log_out);
+            authButton();
+            logOut();
         }}
 
     @Test
@@ -57,7 +61,7 @@ public class AuthorisationTest extends BaseTest{
     @Description("Вход с указанием корректных логина и пароля")
     public void authorisationTrue() {
         Allure.step("Авторизация с корректными данными");
-        auth("login2", "password2");
+        authYes();
         Allure.step("Успешный вход");
         authGood();
     }
@@ -68,7 +72,7 @@ public class AuthorisationTest extends BaseTest{
     @Description("Вход с ошибочными данными")
     public void authorisationFalse() {
         Allure.step("Авторизация с неверными данными");
-        auth("login2", "Password2");
+        authError();
         Allure.step("Авторизация не удалась");
         foundString(R.string.authorization);
     }

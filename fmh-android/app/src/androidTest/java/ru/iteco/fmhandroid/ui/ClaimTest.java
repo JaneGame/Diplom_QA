@@ -17,6 +17,18 @@ import static ru.iteco.fmhandroid.ui.help.Helps.closeKeyboard;
 import static ru.iteco.fmhandroid.ui.help.Helps.foundString;
 import static ru.iteco.fmhandroid.ui.help.Helps.waitElementAndClick;
 import static ru.iteco.fmhandroid.ui.help.Helps.workPopup;
+import static ru.iteco.fmhandroid.ui.help.Steps.authYes;
+import static ru.iteco.fmhandroid.ui.help.Steps.claimEdit;
+import static ru.iteco.fmhandroid.ui.help.Steps.claimInCanceled;
+import static ru.iteco.fmhandroid.ui.help.Steps.claimInOpen;
+import static ru.iteco.fmhandroid.ui.help.Steps.claimInProgress;
+import static ru.iteco.fmhandroid.ui.help.Steps.clickFilter;
+import static ru.iteco.fmhandroid.ui.help.Steps.clickSave;
+import static ru.iteco.fmhandroid.ui.help.Steps.closeKeybordInClaim;
+import static ru.iteco.fmhandroid.ui.help.Steps.executorChange;
+import static ru.iteco.fmhandroid.ui.help.Steps.filterInProgress;
+import static ru.iteco.fmhandroid.ui.help.Steps.filterOk;
+import static ru.iteco.fmhandroid.ui.help.Steps.statusButton;
 import static ru.iteco.fmhandroid.ui.help.WorkClaim.createClaimAfter;
 import static ru.iteco.fmhandroid.ui.help.WorkClaim.createClaimBefore;
 import static ru.iteco.fmhandroid.ui.help.WorkClaim.foundClaim;
@@ -48,7 +60,7 @@ public class ClaimTest extends BaseTest {
     public void loginIfrequired() {
         Allure.step("Наличие авторизации и вход в систему при необходимости");
         if (!checkIfLogin()) {
-            auth("login2", "password2");
+            authYes();
         }
         openClaim();
     }
@@ -60,12 +72,12 @@ public class ClaimTest extends BaseTest {
         LocalDateTime now = LocalDateTime.now();
         String text = "Test" + now;
         createClaimBefore(text);
-        clickElement(R.id.executor_drop_menu_auto_complete_text_view);
+        executorChange();
         workPopup("Ivanov Ivan Ivanovich");
         createClaimAfter(now);
         foundClaim(text);
         Allure.step("Заявка создалась в нужном статусе");
-        clickStringWait(R.string.in_progress);
+        claimInProgress();
     }
 
     @Test
@@ -78,7 +90,7 @@ public class ClaimTest extends BaseTest {
         createClaimAfter(now);
         foundClaim(text);
         Allure.step("Заявка создалась в нужном статусе");
-        clickStringWait(R.string.open);
+        claimInOpen();
     }
     @Test
     @DisplayName("Фильтр заявок")
@@ -89,9 +101,9 @@ public class ClaimTest extends BaseTest {
         createClaimBefore(text);
         createClaimAfter(now);
         Allure.step("Фильтрация заявок");
-        clickElement(R.id.filters_material_button);
-        clickElement(R.id.item_filter_in_progress);
-        clickElement(R.id.claim_list_filter_ok_material_button);
+        clickFilter();
+        filterInProgress();
+        filterOk();
         foundClaim(text);
     }
 
@@ -105,10 +117,10 @@ public class ClaimTest extends BaseTest {
         createClaimAfter(now);
         foundClaim(text);
         Allure.step("Отмена заявки");
-        clickElement(R.id.status_processing_image_button);
+        statusButton();
         workPopup("Cancel");
         Allure.step("Заявка отменена");
-        clickStringWait(R.string.status_claim_canceled);
+        claimInCanceled();
     }
 
     @Test
@@ -121,10 +133,10 @@ public class ClaimTest extends BaseTest {
         createClaimAfter(now);
         foundClaim(text);
         Allure.step("Перевод заявки в статус 'В работе'");
-        clickElement(R.id.status_processing_image_button);
+        statusButton();
         workPopup("take to work");
         Allure.step("Заявка переведена в необходимый статус");
-        clickStringWait(R.string.in_progress);
+        claimInProgress();
     }
 
     @Test
@@ -137,12 +149,12 @@ public class ClaimTest extends BaseTest {
         createClaimAfter(now);
         foundClaim(text);
         Allure.step("Внесение изменений в заявку");
-        clickElement(R.id.edit_processing_image_button);
-        waitElementAndClick(R.id.executor_drop_menu_auto_complete_text_view);
+        claimEdit();
+        executorChange();
         workPopup("Ivanov Ivan Ivanovich");
-        closeKeyboard(R.id.executor_drop_menu_auto_complete_text_view);
-        clickElement(R.id.save_button);
+        closeKeybordInClaim();
+        clickSave();
         Allure.step("Заявка переведена в необходимый статус");
-        clickStringWait(R.string.in_progress);
+        claimInProgress();
     }
 }

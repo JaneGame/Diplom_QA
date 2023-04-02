@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static ru.iteco.fmhandroid.ui.help.Helps.waitElement;
 import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
 
 import android.widget.DatePicker;
@@ -30,6 +31,7 @@ public class WorkClaim {
 
     public static void createClaimBefore(String text){
         Allure.step("Создание заявки до ввода исполнителя");
+        waitElement(R.id.add_new_claim_material_button);
         onView(withId(R.id.add_new_claim_material_button)).perform(click());
         onView(withId(R.id.title_edit_text)).perform(typeText(text));
     }

@@ -20,12 +20,18 @@ import static ru.iteco.fmhandroid.ui.help.Helps.clickString;
 import static ru.iteco.fmhandroid.ui.help.Helps.foundElement;
 import static ru.iteco.fmhandroid.ui.help.Helps.scroll;
 import static ru.iteco.fmhandroid.ui.help.Helps.waitElement;
+import static ru.iteco.fmhandroid.ui.help.Steps.authYes;
+import static ru.iteco.fmhandroid.ui.help.Steps.clickPositive;
+import static ru.iteco.fmhandroid.ui.help.Steps.newFound;
+import static ru.iteco.fmhandroid.ui.help.Steps.newsWait;
 import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
 import static ru.iteco.fmhandroid.ui.help.WorkMenu.openNews;
 import static ru.iteco.fmhandroid.ui.help.WorkNews.clickOk;
 import static ru.iteco.fmhandroid.ui.help.WorkNews.createNews;
 import static ru.iteco.fmhandroid.ui.help.WorkNews.deleteNew;
+import static ru.iteco.fmhandroid.ui.help.WorkNews.filterDate;
 import static ru.iteco.fmhandroid.ui.help.WorkNews.filterNewsByCategory;
+import static ru.iteco.fmhandroid.ui.help.WorkNews.noNew;
 
 import android.widget.DatePicker;
 
@@ -63,7 +69,7 @@ public class NewsTest extends BaseTest {
     public void loginIfrequired() {
         Allure.step("Наличие авторизации и вход в систему при необходимости");
         if (!checkIfLogin()) {
-            auth("login2", "password2");
+            authYes();
         }
         openNews();
     }
@@ -76,8 +82,8 @@ public class NewsTest extends BaseTest {
         String found = "Объявление";
         createNews(text, now, found);
         Allure.step("Поиск созданной новости");
-        waitElement(R.id.news_list_recycler_view);
-        scroll(R.id.news_list_recycler_view,(found+text));
+        newsWait();
+        newFound(found+text);
     }
 
 
@@ -88,24 +94,10 @@ public class NewsTest extends BaseTest {
         String text = "Test" + now;
         createNews(text, now, "Объявление");
         Allure.step("Фильтрация по дате");
-        clickElement(R.id.filter_news_material_button);
-        waitElement(R.id.news_item_publish_date_start_text_input_edit_text);
-        clickElement(R.id.news_item_publish_date_start_text_input_edit_text);
-
-        chooseDate(now);
-
-        clickOk();
-        clickElement(R.id.news_item_publish_date_end_text_input_edit_text);
-
-        chooseDateEnd(now);
-
-        clickOk();
-        clickElement(R.id.filter_button);
-
+        filterDate(now);
         Allure.step("Поиск созданной новости");
-
-        waitElement(R.id.news_list_recycler_view);
-        scroll(R.id.news_list_recycler_view,("Объявление"+text));
+        newsWait();
+        newFound("Объявление"+text);
     }
 
     @Test
@@ -167,15 +159,12 @@ public class NewsTest extends BaseTest {
         String found = "Объявление";
         createNews(text, now, found);
         Allure.step("Поиск новости");
-        waitElement(R.id.news_list_recycler_view);
-        scroll(R.id.news_list_recycler_view,(found+text));
+        newsWait();
+        newFound((found+text));
         Allure.step("Удаление новости");
         deleteNew((found+text));
-        clickString(R.string.fragment_positive_button);
+        clickPositive();
         Allure.step("Новость не ищется");
-        try{scroll(R.id.news_list_recycler_view,(found+text));
-        }catch (PerformException ex){
-            foundElement(R.id.news_list_recycler_view);
-        };
+        noNew((found+text));
     }
 }

@@ -13,12 +13,19 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
+import static ru.iteco.fmhandroid.ui.help.Helps.chooseDate;
+import static ru.iteco.fmhandroid.ui.help.Helps.chooseDateEnd;
+import static ru.iteco.fmhandroid.ui.help.Helps.clickElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.foundElement;
+import static ru.iteco.fmhandroid.ui.help.Helps.scroll;
+import static ru.iteco.fmhandroid.ui.help.Helps.waitElement;
 import static ru.iteco.fmhandroid.ui.help.Helps.workPopup;
 import static ru.iteco.fmhandroid.ui.help.WaitId.waitId;
 
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -82,5 +89,24 @@ public class WorkNews {
 
     public static void deleteNew(String text){
         onView(allOf(hasSibling(withText(text)), withId(R.id.delete_news_item_image_view))).perform(click());
+    }
+
+    public static void filterDate(LocalDateTime now){
+        clickElement(R.id.filter_news_material_button);
+        waitElement(R.id.news_item_publish_date_start_text_input_edit_text);
+        clickElement(R.id.news_item_publish_date_start_text_input_edit_text);
+        chooseDate(now);
+        clickOk();
+        clickElement(R.id.news_item_publish_date_end_text_input_edit_text);
+        chooseDateEnd(now);
+        clickOk();
+        clickElement(R.id.filter_button);
+    }
+
+    public static void noNew(String text){
+        try{scroll(R.id.news_list_recycler_view,(text));
+        }catch (PerformException ex){
+            foundElement(R.id.news_list_recycler_view);
+        };
     }
 }

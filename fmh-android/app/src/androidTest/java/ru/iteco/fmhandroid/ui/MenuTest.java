@@ -31,6 +31,12 @@ import static ru.iteco.fmhandroid.ui.help.Helps.clickElement;
 import static ru.iteco.fmhandroid.ui.help.Helps.clickString;
 import static ru.iteco.fmhandroid.ui.help.Helps.foundElement;
 import static ru.iteco.fmhandroid.ui.help.Helps.waitElement;
+import static ru.iteco.fmhandroid.ui.help.Steps.aboutWait;
+import static ru.iteco.fmhandroid.ui.help.Steps.allClaimsGood;
+import static ru.iteco.fmhandroid.ui.help.Steps.allNewsGood;
+import static ru.iteco.fmhandroid.ui.help.Steps.mainWait;
+import static ru.iteco.fmhandroid.ui.help.WorkMenu.Main;
+import static ru.iteco.fmhandroid.ui.help.WorkMenu.openAbout;
 import static ru.iteco.fmhandroid.ui.help.WorkMenu.openClaim;
 import static ru.iteco.fmhandroid.ui.help.WorkMenu.openNews;
 
@@ -56,7 +62,7 @@ public class MenuTest extends BaseTest {
             public void menuClaims(){
             openClaim();
             Allure.step("Заявки отображаются");
-            foundElement(R.id.claim_list_recycler_view);
+            allClaimsGood();
         }
 
         @Test
@@ -64,28 +70,23 @@ public class MenuTest extends BaseTest {
         public void menuNews(){
             openNews();
             Allure.step("Новости отображаются");
-            foundElement(R.id.all_news_cards_block_constraint_layout);
+            allNewsGood();
         }
 
         @Test
         @DisplayName("Переход к информации о хосписе")
         public void menuAboutUs(){
-            authGood();
-            Allure.step("Переход к информации о хосписе");
-            clickElement(R.id.main_menu_image_button);
-            clickString(R.string.about);
+            openAbout();
             Allure.step("Информация о хосписе отображается");
-            waitElement(R.id.container_custom_app_bar_include_on_fragment_about);
+            aboutWait();
         }
 
         @Test
         @DisplayName("Переход на главную страницу через меню")
         public void menuMain(){
             menuNews();
-            Allure.step("Переход на главную страницу");
-            clickElement(R.id.main_menu_image_button);
-            clickString(R.string.main);
+            Main();
             Allure.step("Главная страница отображается");
-            waitElement(R.id.container_custom_app_bar_include_on_fragment_main);
+            mainWait();
         }
 }
